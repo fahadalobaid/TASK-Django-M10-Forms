@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render ,redirect
 from .forms import StoreItemForm
@@ -24,3 +25,21 @@ def create_store_item(request,):
 
     }
     return render(request,'create_store_item.html',context)
+
+
+def update_store_item(request,item_id):
+    store_item = models.StoreItem.objects.get(id=item_id)
+    form = StoreItemForm(instance=store_item)
+    if request.method == 'POST':
+        form = StoreItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('')
+
+    context = {
+     "form":form,
+     "store_item" :store_item
+
+        
+    }
+    return render(request,'update_store_item.html',context)
